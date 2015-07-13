@@ -1,0 +1,21 @@
+{
+  "name": "movees",
+  "version": "1.0.0",
+  "description": "cli torrent streaming movie player",
+  "bin": "./bin/movees",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.1.0",
+    "minimist": "^1.1.1",
+    "open": "0.0.5",
+    "parse-torrent": "^5.2.1",
+    "request": "^2.58.0",
+    "unzip": "^0.1.11",
+    "yts": "^1.0.0"
+  }
+}
