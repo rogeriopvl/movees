@@ -4,6 +4,8 @@ var chalk = require('chalk');
 
 var showRecentMovies = function (options) {
   options = options || {};
+  options.sort_by = options.sort_by || 'year';
+  options.order_by = options.order_by || 'desc';
 
   Yts.listMovies(options, function (err, res) {
     if (err) { console.log(err); }
@@ -55,7 +57,7 @@ var getMovie = function (movieID, quality, subs) {
     var parseTorrent = require('parse-torrent');
     parseTorrent.remote(torrInfo.url, function (err, tinfo) {
       var magnetURI = parseTorrent.toMagnetURI(tinfo);
-      // var cmd = peerflix -t ' + res.data.slug + '.srt "' + magnetURI + '" --vlc');
+
       var peerflix = spawn('peerflix', [
         '-t',
         res.data.slug + '.srt',
@@ -112,5 +114,8 @@ if (argv.search) {
 } else if (argv.help) {
   showHelp();
 } else {
-  showRecentMovies({});
+  var opts = {};
+  opts.page = argv.page || 1;
+  opts.limit = argv.limit || '20';
+  showRecentMovies(opts);
 }
