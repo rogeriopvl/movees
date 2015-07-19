@@ -75,7 +75,7 @@ var getMovie = function (movieID, quality, subs) {
     });
 
     YSubs.getSubtitles(res.data.imdb_code, function (err, data) {
-      if (!data[subs]) {
+      if (!data || !data[subs]) {
         return console.log('No subtitles available in %s', subs);
       }
       var zipPath = data[subs].shift().url;
