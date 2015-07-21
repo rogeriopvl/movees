@@ -1,6 +1,7 @@
 var argv = require('minimist')(process.argv.slice(2));
 var Yts = require('./lib/yts.js');
 var chalk = require('chalk');
+var path = require('path');
 
 var showRecentMovies = function (options) {
   options = options || {};
@@ -58,7 +59,8 @@ var getMovie = function (movieID, quality, subs) {
     parseTorrent.remote(torrInfo.url, function (err, tinfo) {
       var magnetURI = parseTorrent.toMagnetURI(tinfo);
 
-      var peerflix = spawn('peerflix', [
+      var peerflixPath = path.join('.', 'node_modules', '.bin', 'peerflix');
+      var peerflix = spawn(peerflixPath, [
         '-t',
         res.data.slug + '.srt',
         magnetURI,

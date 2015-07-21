@@ -6,11 +6,10 @@ Movees is a popcorn-time like client for the command line. It searches movies an
 
 ## Install
 
-    npm install -g peerflix movees
+    npm install -g movees
 
 ### Dependencies
 
-- Peerflix
 - VLC
 
 ## Running
