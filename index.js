@@ -96,8 +96,9 @@ var showHelp = function () {
   console.log('--search <search term>  search for a movie');
   console.log('--info <movie id>  open web page with movie info');
   console.log('--watch <movie id> [--quality <720p|1080p|3d> [--subs <subtitle language>]   watch a movie');
-  console.log('--version');
-  console.log('--help');
+  console.log('--latest [--page <page number>] [--limit <number of movies p/page>]  show latest movies available');
+  console.log('--version  show version');
+  console.log('--help     show usage help');
 };
 
 var showVersion = function () {
@@ -134,13 +135,13 @@ if (argv.search) {
   getMovie(argv.watch, argv.quality, argv.subs);
 } else if (argv.info) {
   getInfo(argv.info);
-} else if (argv.version) {
-  showVersion();
-} else if (argv.help) {
-  showHelp();
-} else {
+} else if (argv.latest) {
   var opts = {};
   opts.page = argv.page || 1;
   opts.limit = argv.limit || '20';
   showRecentMovies(opts);
+} else if (argv.version) {
+  showVersion();
+} else {
+  showHelp();
 }

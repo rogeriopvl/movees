@@ -27,6 +27,7 @@ Then copy the ID of the movie, and use it in the following command:
 
 ### More options
 
+    movees --latest [--page <page number>] [--limit <number of movies p/page>] show latest movies
     movees --info <movie_id>    # will open your browser with the movie info page
 
     movees --help
