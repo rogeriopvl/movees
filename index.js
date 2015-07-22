@@ -2,6 +2,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var Yts = require('./lib/yts.js');
 var chalk = require('chalk');
 var path = require('path');
+var isOutdated = require('is-outdated');
 
 var showRecentMovies = function (options) {
   options = options || {};
@@ -102,9 +103,25 @@ var showVersion = function () {
   console.log('Movees (version %s)', version);
 };
 
+var checkForUpdates = function () {
+  var currentVersion = require('./package.json').version;
+  isOutdated('movees', currentVersion, function (err, res) {
+    if (res) {
+      console.log('\n----------------------------------------');
+      console.log(chalk.bold('** UPDATE AVAILABLE **'));
+      console.log(chalk.underline('New version:') + ' ' + chalk.green(res.version));
+      console.log(chalk.underline('Current version:') + ' ' + chalk.red(currentVersion));
+      console.log('\nPlease update with: npm update -g movees');
+      console.log('----------------------------------------\n');
+    }
+  });
+};
+
 /**
  * CLI arguments handling
  */
+
+checkForUpdates();
 
 if (argv.search) {
   searchMovie(argv.search);
