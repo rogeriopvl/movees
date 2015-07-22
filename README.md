@@ -12,17 +12,26 @@ Movees is a popcorn-time like client for the command line. It searches movies an
 
 - VLC
 
-## Running
+## Usage
 
-    movees --search <name_of_movie>
+### Step 1 - Search movie
 
+    movees --search "<name_of_movie>"
+
+**Note:** You should use double quotes around movie names that have more than one word or have non alpha-numeric characters.
+
+### Step 2 - Play movie
 Then copy the ID of the movie, and use it in the following command:
 
     movees --watch <movie_id> --subs portuguese
 
-More options:
+### More options
 
     movees --info <movie_id>    # will open your browser with the movie info page
+
+    movees --help
+
+    movees --version
 
 ## Legal Notice
 
