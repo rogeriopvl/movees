@@ -121,7 +121,10 @@ var checkForUpdates = function () {
  * CLI arguments handling
  */
 
-checkForUpdates();
+// avoid calling npm when testing
+if (!argv.test) {
+  checkForUpdates();
+}
 
 if (argv.search) {
   searchMovie(argv.search);
