@@ -6,6 +6,7 @@ var tmpdir = require('os-tmpdir');
 var isOutdated = require('is-outdated');
 var parseTorrent = require('parse-torrent');
 var open = require('open');
+var validURL = require('valid-url');
 var spawn = require('child_process').spawn;
 
 var showRecentMovies = function (options) {
@@ -39,8 +40,17 @@ var searchMovie = function (str) {
 var getInfo = function (movieID) {
   Yts.movieDetails({ movie_id: movieID }, function (err, res) {
     if (err) { return console.log(err); }
+
+    if (res.status === 'error') {
+      return console.log(chalk.red(res.status_message));
+    }
+
     console.log('Opening browser with movie info...');
-    open(res.data.url);
+    if (validURL.isWebUri(res.data.url)) {
+      open(res.data.url);
+    } else {
+      console.log(chalk.yellow('Movie has invalid URL'));
+    }
   });
 }
 
