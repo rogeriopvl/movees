@@ -2,7 +2,11 @@ var argv = require('minimist')(process.argv.slice(2));
 var Yts = require('./lib/yts.js');
 var chalk = require('chalk');
 var path = require('path');
+var tmpdir = require('os-tmpdir');
 var isOutdated = require('is-outdated');
+var parseTorrent = require('parse-torrent');
+var open = require('open');
+var spawn = require('child_process').spawn;
 
 var showRecentMovies = function (options) {
   options = options || {};
@@ -33,7 +37,6 @@ var searchMovie = function (str) {
 };
 
 var getInfo = function (movieID) {
-  var open = require('open');
   Yts.movieDetails({ movie_id: movieID }, function (err, res) {
     if (err) { return console.log(err); }
     console.log('Opening browser with movie info...');
@@ -46,24 +49,24 @@ var getMovie = function (movieID, quality, subs) {
   subs = subs || 'english';
   var YSubs = require('./lib/ysubs.js');
 
-  var spawn = require('child_process').spawn;
 
   Yts.movieDetails({ movie_id: movieID }, function (err, res) {
     if (res.status === 'error') {
       return console.log(chalk.red(res.status_message));
     }
 
+    var subsSavePath = path.join(tmpdir(), res.data.slug + '.srt');
+
     var torrInfo = res.data.torrents.filter(function (torr) {
       return torr.quality === quality;
     }).pop();
-    var parseTorrent = require('parse-torrent');
     parseTorrent.remote(torrInfo.url, function (err, tinfo) {
       var magnetURI = parseTorrent.toMagnetURI(tinfo);
 
       var peerflixPath = path.join(__dirname, 'node_modules', '.bin', 'peerflix');
       var peerflix = spawn(peerflixPath, [
         '-t',
-        res.data.slug + '.srt',
+        subsSavePath,
         magnetURI,
         '--vlc'
       ]);
@@ -82,7 +85,7 @@ var getMovie = function (movieID, quality, subs) {
         return console.log('No subtitles available in %s', subs);
       }
       var zipPath = data[subs].shift().url;
-      YSubs.fetchSubtitle(zipPath, res.data.slug + '.srt', function (err, data) {
+      YSubs.fetchSubtitle(zipPath, subsSavePath, function (err, data) {
         if (err) { console.log(err); }
       });
     });
