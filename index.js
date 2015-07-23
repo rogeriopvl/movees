@@ -60,7 +60,7 @@ var getMovie = function (movieID, quality, subs) {
     parseTorrent.remote(torrInfo.url, function (err, tinfo) {
       var magnetURI = parseTorrent.toMagnetURI(tinfo);
 
-      var peerflixPath = path.join('.', 'node_modules', '.bin', 'peerflix');
+      var peerflixPath = path.join(__dirname, 'node_modules', '.bin', 'peerflix');
       var peerflix = spawn(peerflixPath, [
         '-t',
         res.data.slug + '.srt',
