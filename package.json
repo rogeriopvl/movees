@@ -1,6 +1,6 @@
 {
   "name": "movees",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "cli torrent streaming movie player",
   "bin": "./bin/movees",
   "main": "index.js",
