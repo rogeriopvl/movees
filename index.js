@@ -65,11 +65,21 @@ var getMovie = function (movieID, quality, subs) {
       return console.log(chalk.red(res.status_message));
     }
 
+    if (!res.data.torrents || res.data.torrents.length === 0) {
+      return console.log(chalk.red('Movie has no torrents available'));
+    }
+
+    if (res.data.torrents.length === 1) {
+      quality = res.data.torrents[0].quality;
+      console.log(chalk.yellow('Using ' + quality));
+    }
+
     var subsSavePath = path.join(tmpdir(), res.data.slug + '.srt');
 
     var torrInfo = res.data.torrents.filter(function (torr) {
       return torr.quality === quality;
     }).pop();
+
     parseTorrent.remote(torrInfo.url, function (err, tinfo) {
       var magnetURI = parseTorrent.toMagnetURI(tinfo);
 
