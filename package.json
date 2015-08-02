@@ -5,7 +5,7 @@
   "bin": "./bin/movees",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "tape test/*.js"
   },
   "author": "",
   "license": "MIT",

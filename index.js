@@ -1,4 +1,3 @@
-var argv = require('minimist')(process.argv.slice(2));
 var Yts = require('./lib/yts.js');
 var chalk = require('chalk');
 var path = require('path');
@@ -148,23 +147,25 @@ var checkForUpdates = function () {
  */
 
 // avoid calling npm when testing
-if (!argv.test) {
-  checkForUpdates();
-}
+module.exports = function (argv) {
+  if (!argv.test) {
+    checkForUpdates();
+  }
 
-if (argv.search) {
-  searchMovie(argv.search);
-} else if (argv.watch) {
-  getMovie(argv.watch, argv.quality, argv.subs);
-} else if (argv.info) {
-  getInfo(argv.info);
-} else if (argv.latest) {
-  var opts = {};
-  opts.page = argv.page || 1;
-  opts.limit = argv.limit || '20';
-  showRecentMovies(opts);
-} else if (argv.version) {
-  showVersion();
-} else {
-  showHelp();
-}
+  if (argv.search) {
+    searchMovie(argv.search);
+  } else if (argv.watch) {
+    getMovie(argv.watch, argv.quality, argv.subs);
+  } else if (argv.info) {
+    getInfo(argv.info);
+  } else if (argv.latest) {
+    var opts = {};
+    opts.page = argv.page || 1;
+    opts.limit = argv.limit || '20';
+    showRecentMovies(opts);
+  } else if (argv.version) {
+    showVersion();
+  } else {
+    showHelp();
+  }
+};
