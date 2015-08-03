@@ -3,10 +3,17 @@ var chalk = require('chalk');
 var path = require('path');
 var tmpdir = require('os-tmpdir');
 var isOutdated = require('is-outdated');
+var Configstore = require('configstore');
+var pkg = require('./package.json');
 var parseTorrent = require('parse-torrent');
 var open = require('open');
 var validURL = require('valid-url');
 var spawn = require('child_process').spawn;
+
+var Conf = new Configstore(pkg.name, {
+  lastUpdate: Date.now(),
+  lastVersion: pkg.version
+});
 
 var showRecentMovies = function (options) {
   options = options || {};
@@ -124,22 +131,42 @@ var showHelp = function () {
 };
 
 var showVersion = function () {
-  var version = require('./package.json').version;
-  console.log('Movees (version %s)', version);
+  console.log('Movees (version %s)', pkg.version);
+};
+
+var showUpdateMsg = function (version) {
+  console.log('\n----------------------------------------');
+  console.log(chalk.bold('** UPDATE AVAILABLE **'));
+  console.log(chalk.underline('New version:') + ' ' + chalk.green(version));
+  console.log(chalk.underline('Current version:') + ' ' + chalk.red(pkg.version));
+  console.log('\nPlease update with: npm update -g movees');
+  console.log('----------------------------------------\n');
 };
 
 var checkForUpdates = function () {
-  var currentVersion = require('./package.json').version;
-  isOutdated('movees', currentVersion, function (err, res) {
-    if (res) {
-      console.log('\n----------------------------------------');
-      console.log(chalk.bold('** UPDATE AVAILABLE **'));
-      console.log(chalk.underline('New version:') + ' ' + chalk.green(res.version));
-      console.log(chalk.underline('Current version:') + ' ' + chalk.red(currentVersion));
-      console.log('\nPlease update with: npm update -g movees');
-      console.log('----------------------------------------\n');
+  var lastUpdate = Conf.get('lastUpdate');
+  var newVersion = Conf.get('newVersion');
+  if ((Date.now() - lastUpdate) >= 432e6) { // 5 days
+    isOutdated('movees', pkg.version, function (err, res) {
+      if (res) {
+        Conf.set('newVersion', res.version);
+        showUpdateMsg(res.version);
+      } else {
+        Conf.del('newVersion');
+      }
+    });
+    Conf.set('lastUpdate', Date.now());
+  } else {
+    // check if we had an update
+    if (pkg.version !== Conf.get('lastVersion')) {
+      Conf.set('lastVersion', pkg.version);
+      Conf.del('newVersion');
+      return;
     }
-  });
+    if (newVersion) {
+      showUpdateMsg(newVersion);
+    }
+  }
 };
 
 /**
