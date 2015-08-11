@@ -24,7 +24,7 @@ var showRecentMovies = function (options) {
     if (err) { console.log(err); }
 
     res.data.movies.forEach(function (movie) {
-      console.log(chalk.underline.yellow(movie.id) + ': ' + movie.title_long);
+      console.log(chalk.underline.yellow(movie.id) + ' : ' + movie.title_long);
     });
   });
 };
