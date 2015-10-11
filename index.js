@@ -1,4 +1,5 @@
 var Yts = require('./lib/yts.js');
+var YSubs = require('./lib/ysubs.js');
 var chalk = require('chalk');
 var path = require('path');
 var tmpdir = require('os-tmpdir');
@@ -62,9 +63,6 @@ var getInfo = function (movieID) {
 
 var getMovie = function (movieID, quality, subs) {
   quality = quality || '720p';
-  subs = subs || 'english';
-  var YSubs = require('./lib/ysubs.js');
-
 
   Yts.movieDetails({ movie_id: movieID }, function (err, res) {
     if (res.status === 'error') {
@@ -106,15 +104,17 @@ var getMovie = function (movieID, quality, subs) {
       });
     });
 
-    YSubs.getSubtitles(res.data.imdb_code, function (err, data) {
-      if (!data || !data[subs]) {
-        return console.log('No subtitles available in %s', subs);
-      }
-      var zipPath = data[subs].shift().url;
-      YSubs.fetchSubtitle(zipPath, subsSavePath, function (err, data) {
-        if (err) { console.log(err); }
+    if (subs) {
+      YSubs.getSubtitles(res.data.imdb_code, function (err, data) {
+        if (!data || !data[subs]) {
+          return console.log('No subtitles available in %s', subs);
+        }
+        var zipPath = data[subs].shift().url;
+        YSubs.fetchSubtitle(zipPath, subsSavePath, function (err, data) {
+          if (err) { console.log(err); }
+        });
       });
-    });
+    }
   })
 };
 
