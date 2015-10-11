@@ -10,6 +10,7 @@ var parseTorrent = require('parse-torrent');
 var open = require('open');
 var validURL = require('valid-url');
 var spawn = require('child_process').spawn;
+var _max = require('lodash.max');
 
 var Conf = new Configstore(pkg.name, {
   lastUpdate: Date.now(),
@@ -78,7 +79,7 @@ var getMovie = function (movieID, quality, subs) {
       console.log(chalk.yellow('Using ' + quality));
     }
 
-    var subsSavePath = path.join(tmpdir(), res.data.slug + '.srt');
+    var subsSavePath = subs ? path.join(tmpdir(), res.data.slug + '.srt') : false;
 
     var torrInfo = res.data.torrents.filter(function (torr) {
       return torr.quality === quality;
@@ -88,12 +89,12 @@ var getMovie = function (movieID, quality, subs) {
       var magnetURI = parseTorrent.toMagnetURI(tinfo);
 
       var peerflixPath = path.join(__dirname, 'node_modules', '.bin', 'peerflix');
-      var peerflix = spawn(peerflixPath, [
-        '-t',
-        subsSavePath,
-        magnetURI,
-        '--vlc'
-      ]);
+
+      var peerflixArgs = [];
+      if (subsSavePath) { peerflixArgs.push('-t', subsSavePath); }
+      peerflixArgs.push(magnetURI, '--vlc');
+
+      var peerflix = spawn(peerflixPath, peerflixArgs);
 
       peerflix.stdout.on('data', function (data) {
         process.stdout.write(data);
@@ -105,12 +106,11 @@ var getMovie = function (movieID, quality, subs) {
     });
 
     if (subs) {
-      YSubs.getSubtitles(res.data.imdb_code, function (err, data) {
-        if (!data || !data[subs]) {
+      YSubs.getSubtitle(res.data.imdb_code, subs, function (err, subURL) {
+        if (err || !subURL) {
           return console.log('No subtitles available in %s', subs);
         }
-        var zipPath = data[subs].shift().url;
-        YSubs.fetchSubtitle(zipPath, subsSavePath, function (err, data) {
+        YSubs.fetchSubtitle(subURL, subsSavePath, function (err, data) {
           if (err) { console.log(err); }
         });
       });
