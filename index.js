@@ -23,7 +23,7 @@ var showRecentMovies = function (options) {
   options.order_by = options.order_by || 'desc';
 
   Yts.listMovies(options, function (err, res) {
-    if (err) { console.log(err); }
+    if (err) { return console.log(err); }
 
     res.data.movies.forEach(function (movie) {
       console.log(chalk.underline.yellow(movie.id) + ' : ' + movie.title_long);
@@ -33,7 +33,7 @@ var showRecentMovies = function (options) {
 
 var searchMovie = function (str) {
   Yts.listMovies({ query_term: str }, function (err, res) {
-    if (err) { console.log(err); }
+    if (err) { return console.log(err); }
 
     if (res.data.movies.length < 1) {
       console.log('No movies found');
