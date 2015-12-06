@@ -1,5 +1,7 @@
 # Movees [![Build Status](https://travis-ci.org/rogeriopvl/movees.svg?branch=master)](https://travis-ci.org/rogeriopvl/movees)
 
+## Important Notice: The YTS API was shutdown. As long as this API is not available Movees does not work!
+
 ## Info
 
 Movees is a popcorn-time like client for the command line. It searches movies and can play them (with subtitles) by streaming torrent files using Peerflix and VLC.
