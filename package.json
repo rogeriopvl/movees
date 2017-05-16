@@ -11,14 +11,14 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^1.1.0",
-    "configstore": "^1.2.0",
+    "configstore": "^3.1.0",
     "is-outdated": "^1.0.1",
-    "lodash.max": "^3.4.0",
+    "lodash.max": "^4.0.1",
     "minimist": "^1.1.1",
     "open": "0.0.5",
     "os-tmpdir": "^1.0.1",
     "parse-torrent": "^5.2.1",
-    "peerflix": "^0.30.1",
+    "peerflix": "^0.36.3",
     "request": "^2.58.0",
     "unzip": "^0.1.11",
     "valid-url": "^1.0.9"
@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "concat-stream": "^1.5.0",
-    "mockery": "^1.4.0",
-    "nock": "^2.15.0",
+    "mockery": "^2.0.0",
+    "nock": "^9.0.13",
     "tape": "^4.0.1"
   }
 }
