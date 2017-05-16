@@ -1,5 +1,7 @@
 # Movees [![Build Status](https://travis-ci.org/rogeriopvl/movees.svg?branch=master)](https://travis-ci.org/rogeriopvl/movees)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/rogeriopvl/movees.svg)](https://greenkeeper.io/)
+
 ## Important Notice: The YTS API was shutdown. As long as this API is not available Movees does not work!
 
 ## Info
